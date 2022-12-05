@@ -1,4 +1,4 @@
-name = "adventcode"
+name = "aoc_fortran"
 version = "0.1.0"
 license = "license"
 author = "Euler-37"
