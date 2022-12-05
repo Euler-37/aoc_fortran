@@ -1,0 +1,12 @@
+name = "adventcode"
+version = "0.1.0"
+license = "license"
+author = "Euler-37"
+[build]
+auto-executables = true
+auto-tests = true
+auto-examples = true
+[install]
+library = false
+[dependencies]
+fortran_vector.git = "https://github.com/Euler-37/fortran_vector"
