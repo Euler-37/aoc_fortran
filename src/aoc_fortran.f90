@@ -96,4 +96,36 @@ contains
       call system_clock(tic,count_rate=rate)
       res=real(tic,8)/rate
    end function clock
-end module aoc_fortran
+
+    integer(8) function string_hashcode(str)result(h)
+        character(len=*),intent(in)::str
+        integer::i
+        integer(8)::g
+        integer(8),parameter::PP=int(z"F0000000",8)
+        do i=1,len(str)
+            h=shiftl(h,4)+ichar(str(i:i))
+            g=iand(h,pp)
+            if(g/=0)h=ieor(h,shiftl(g,24))
+            h=iand(h,not(g))
+        end do
+    end function string_hashcode
+
+    elemental integer(8) function lcm(m,n)result(r)
+       integer(8),intent(in)::m,n
+       r=m*n/gcd(m,n)
+    end function lcm
+
+    elemental integer(8) function gcd(m,n)result(r)
+       integer(8),intent(in)::m,n
+       integer(8)::a,b
+       a=max(m,n)
+       b=min(m,n)
+       do
+          r=mod(a,b)
+          if(r==0)exit
+          a=b
+          b=r
+       end do
+       r=b
+    end function gcd
+ end module aoc_fortran
