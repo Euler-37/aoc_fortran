@@ -1,4 +1,5 @@
 module dijkstra_mod
+   use stack_int_mod
    implicit none
    private
    public::link_mat,size,dijkstra
@@ -71,25 +72,25 @@ contains
    end subroutine link_mat_cut
 
 
-   integer function dijkstra(mat,posi,posj)result(res)
+   integer function dijkstra(mat,posi,posj,path)result(res)
       type(link_mat),intent(in)::mat(:)
       integer,intent(in)::posi,posj
       integer,allocatable::node(:)
       integer,allocatable::distance(:)
       logical,allocatable::is_add(:)
+      type(stack_int),optional::path
       integer::m,i,dis
       integer::pos,val
       m=size(mat)
-      allocate(node(m))
       allocate(distance(m))
       allocate(is_add(m))
-      node=0
+      if(present(path)) allocate(node(m),source=0)
       distance=huge(1)
       is_add=.false.
       !! add init node
       is_add(posi)=.true.
       do i=1,size(mat(posi))
-         node(mat(posi)%near(i))=posi
+         if(present(path)) node(mat(posi)%near(i))=posi
          distance(mat(posi)%near(i))=mat(posi)%dis(i)
       end do
       !do while(any(is_add==0))
@@ -109,15 +110,25 @@ contains
                if(.not.is_add(posk))then
                   dis=val+mat(pos)%dis(i)
                   if(distance(posk)>dis)then
-                     node(posk)=pos
+                     if(present(path))node(posk)=pos
                      distance(posk)=dis
                   end if
                end if
             end associate
          end do
       end do
+      if(present(path))then
+         call path%init()
+         i=posj
+         do
+            call path%push(i)
+            if(node(i)==posi)exit
+            i=node(i)
+         end do
+         call path%push(posi)
+         deallocate(node)
+      end if
       res=distance(posj)
-      deallocate(node)
       deallocate(distance)
       deallocate(is_add)
    end function dijkstra

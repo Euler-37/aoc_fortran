@@ -41,7 +41,6 @@ program main
          end if
       end do
    end do
-   write(*,*)path
 contains
    function map_idx(i,n)
       integer,intent(in)::i(2)
@@ -49,5 +48,12 @@ contains
       integer::map_idx
       map_idx=(i(1)-1)*n+i(2)
    end function map_idx
+
+   function pos_idx(pos,n)result(f1)
+      integer,intent(in)::pos
+      integer,intent(in)::n
+      integer::f1(2)
+      f1=[(pos-1)/n+1,modulo(pos-1,n)+1]
+   end function pos_idx
 
 end program main
