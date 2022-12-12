@@ -15,7 +15,7 @@ contains
    impure elemental subroutine monkey_print(this)
       class(monkey),intent(in)::this
       write(*,"(A)",advance="no")"iterm:["
-      write(*,"(*(g0,:,1x))",advance="no")this%iterms%x_(1:this%iterms%num_)
+      write(*,"(*(g0,:,1x))",advance="no")this%iterms%x_(size(this%iterms))
       write(*,"(A)",advance="no")"]"
       write(*,*)
       write(*,"(*(g0,:,1x))")"operator:",this%oper,this%num
