@@ -128,4 +128,28 @@ contains
        end do
        r=b
     end function gcd
+        ! This function generates the next permutation of an array
+    ! cpp <algorithm> :: next_permutation
+    logical function next_permutation(a)result(found)
+        integer,intent(inout)::a(:)
+        integer::i,j
+        found=.false.
+        associate(n=>size(a))
+            do i=n-1,1,-1
+               if(a(i)<a(i+1))then
+                  found=.true.
+                  exit
+               end if
+            end do
+            if(.not.found) then
+                a=a(n::-1)
+                return
+            end if
+            do j=n,i+1,-1
+               if(a(i)<a(j))exit
+            end do
+            a([i,j])=a([j,i])
+            a(i+1:n)=a(n:i+1:-1)
+        end associate
+    end function next_permutation
  end module aoc_fortran
